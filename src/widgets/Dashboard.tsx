@@ -1,6 +1,7 @@
 import { generateToken } from '@/entities/token/model/token-auth';
 import TokenAuthPanel from '@/widgets/TokenAuthPanel';
 import TokenList from '@/widgets/TokenList';
+import SettingsPanel from '@/widgets/SettingsPanel';
 import type { Component } from 'solid-js';
 
 const Dashboard: Component = () => {
@@ -11,6 +12,8 @@ const Dashboard: Component = () => {
       </div>
       <div class="w-full bg-base-100">
         <div class="p-8 w-2xl">
+          <SettingsPanel />
+
           <p class="flex border-b border-zinc-700 pb-4 mb-4">
             <span class="flex-1 text-xl">Github Copilot device tokens</span>
             <span
