@@ -76,6 +76,7 @@ export async function proxyToCopilot(event: APIEvent, bearerToken: string) {
     method: event.request.method,
     headers,
     body,
+    duplex: 'half',
   });
 
   log.info(`Proxy response: ${proxyResponse.status} ${proxyResponse.statusText}`);
