@@ -2,13 +2,21 @@ import { getBearerToken } from '@/entities/token/api/copilot-token-meta';
 import { getSelectedToken } from '@/entities/token/api/token-storage';
 import { log } from '@/shared/lib/logger';
 import { maskToken } from '@/shared/lib/mask-token';
+import { COPILOT_TOKEN_OVERRIDE_HEADER, PROXY_API_KEYS } from '@/shared/config/config';
 
 const EMPTY_TOKEN = '_';
 
 // Refactored: utility for API routes, not Express middleware
 export async function ensureInternalToken(event) {
-  const authHeader = event.request.headers.get('authorization');
-  const providedToken = authHeader?.replace(/^(token|Bearer) ?/, '') || EMPTY_TOKEN;
+  const proxyAuthEnabled = PROXY_API_KEYS.length > 0;
+  // When proxy auth is enabled, do not parse OAuth token from Authorization header
+  // to stay OpenAI-compatible (clients use Authorization for proxy key).
+  // Allow override via `x-copilot-token`; otherwise use selected token.
+  const rawHeader = proxyAuthEnabled
+    ? event.request.headers.get(COPILOT_TOKEN_OVERRIDE_HEADER)
+    : event.request.headers.get('authorization');
+
+  const providedToken = rawHeader?.replace(/^(token|Bearer) ?/i, '') || EMPTY_TOKEN;
   const selectedToken = await getSelectedToken();
   const oauthToken = providedToken === EMPTY_TOKEN ? selectedToken?.token : providedToken;
 
