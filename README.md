@@ -1,3 +1,7 @@
+> ❗❗❗ I have rewritten the project as [Coxy](https://github.com/coxy-proxy/coxy), which is technically more scalable and has an improved UI/UX. Please take a look. Issues or feature requests are welcome.
+
+------
+
 # Copilot Proxy
 
 A simple HTTP proxy that exposes your GitHub Copilot free quota as an OpenAI-compatible API.
