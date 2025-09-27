@@ -63,6 +63,34 @@ A simple HTTP proxy that exposes your GitHub Copilot free quota as an OpenAI-com
       - `LANGFUSE_PUBLIC_KEY`: Langfuse public key
       - `LANGFUSE_BASEURL`: Langfuse base URL (default: `https://cloud.langfuse.com`)
 
+### Proxy authentication (optional)
+- `PROXY_API_KEYS`: Comma-separated list of API keys required to access the local OpenAI-compatible API. If empty/unset, no proxy auth is enforced (backward compatible).
+
+When `PROXY_API_KEYS` is set:
+- Clients must send `Authorization: Bearer <proxy_api_key>` when calling `http://localhost:3000/api`.
+- The Copilot OAuth token used for upstream calls is resolved as follows:
+  - By default, the "selected" token (set in Admin UI) is used.
+  - To override per-request, send `X-Copilot-Token: <github_oauth_token>` header.
+
+Examples:
+```bash
+# Set proxy keys and run
+export PROXY_API_KEYS=mykey1,mykey2
+
+# Use selected token (no override)
+curl -H "Authorization: Bearer mykey1" \
+     -H 'content-type: application/json' \
+     --data '{"model":"gpt-4","messages":[{"role":"user","content":"Hi"}]}' \
+     http://localhost:3000/api/chat/completions
+
+# Override with a specific GitHub OAuth token for this request
+curl -H "Authorization: Bearer mykey1" \
+     -H "X-Copilot-Token: ghp_..." \
+     -H 'content-type: application/json' \
+     --data '{"model":"gpt-4","messages":[{"role":"user","content":"Hi"}]}' \
+     http://localhost:3000/api/chat/completions
+```
+
 ## Advanced usage
 - Dummy token `_` to make copilot-proxy use the default token.
     - In most cases, the default token just works without 'Authorization' header. But if your LLM client requires a non-empty API key, you can use the special dummy token `_` to make copilot-proxy use the default token.
