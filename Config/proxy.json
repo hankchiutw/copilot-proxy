@@ -1,0 +1,15 @@
+{
+  "proxy": {
+    "host": "127.0.0.1",
+    "port": 5050
+  },
+  "monsterTools": {
+    "url": "http://127.0.0.1:5000"
+  },
+  "lmStudio": {
+    "url": "http://127.0.0.1:1234",
+    "model": "ibm/granite-4-h-tiny",
+    "temperature": 0.0,
+    "stream": true
+  }
+}

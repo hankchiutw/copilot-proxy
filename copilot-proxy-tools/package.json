@@ -1,0 +1,23 @@
+{
+  "name": "copilot-proxy-tools",
+  "version": "1.0.0",
+  "description": "Copilot compatibility proxy for MonsterTools",
+  "author": "Ty Rejinfo SyntheticSkyVoid",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "workers": {
+    "workspaceScan": "workspace_scan",
+    "readFile": "read_file",
+    "writeFile": "write_file",
+    "patchFile": "patch_file",
+    "search": "search",
+    "ast": "ast",
+    "validate": "validate",
+    "build": "build",
+    "compiler": "compiler",
+    "test": "test",
+    "git": "git"
+  }
+}

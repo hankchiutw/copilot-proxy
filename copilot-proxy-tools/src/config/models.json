@@ -1,0 +1,13 @@
+{
+  "defaultModel": "ibm/granite-4-h-tiny",
+  "models": [
+    {
+      "id": "ibm/granite-4-h-tiny",
+      "provider": "lmstudio",
+      "endpoint": "http://127.0.0.1:1234/v1",
+      "contextWindow": 8192,
+      "supportsTools": true,
+      "supportsStreaming": true
+    }
+  ]
+}

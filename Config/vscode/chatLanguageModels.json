@@ -1,0 +1,20 @@
+[
+  {
+    "name": "MonsterTools Proxy",
+    "vendor": "customendpoint",
+    "apiKey": "local-dev-token",
+    "apiType": "chat-completions",
+    "models": [
+      {
+        "id": "ibm/granite-4-h-tiny",
+        "name": "MonsterTools Proxy",
+        "url": "http://127.0.0.1:5050/v1/chat/completions",
+        "toolCalling": true,
+        "vision": false,
+        "maxInputTokens": 8192,
+        "maxOutputTokens": 4096,
+        "streaming": true
+      }
+    ]
+  }
+]

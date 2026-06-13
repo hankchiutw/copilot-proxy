@@ -1,0 +1,115 @@
+
+
+To Set Up first open a terminal in copilot-proxy-tools
+
+Run:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+Then:
+npm install
+
+once installed 
+
+traverse to MonsterTools folder open a new terminal 
+
+Run
+dotnet clean
+
+then
+dotnet build
+
+then 
+dotnet run
+
+MonsterTools will start up both MonsterTools and copilot-proxy-tools
+
+UPDATED LOCAL ROUTING SETUP
+
+1. Open VS Code.
+2. In the Chat model picker, select other Models and settings - Add Models - Custom Endpoints.
+add This ->
+ 
+{
+    "name": "MonsterTools Proxy",
+    "vendor": "customendpoint",
+    "apiKey": "local-dev-token",
+    "apiType": "chat-completions",
+    "models": 
+	    [
+          
+			{
+        "id": "ibm/granite-4-h-tiny",
+        "name": "MonsterTools Proxy",
+        "url": "http://127.0.0.1:5050/v1/chat/completions",
+        "toolCalling": true,
+        "vision": false,
+        "maxInputTokens": 50000,
+        "maxOutputTokens": 50000,
+        "streaming": true
+        }
+        ]
+   }
+   {
+    "recommendations": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+    ]
+}
+
+Change id to Your LLM SetUp in LM Studio, save and close chatLanguageModels.json
+
+mcp.json for LM Studio
+
+{
+  "proxy": {
+    "host": "127.0.0.1",
+    "port": 5050
+  },
+  "monsterTools": {
+    "url": "http://127.0.0.1:5000"
+  },
+  "lmStudio": {
+    "url": "http://127.0.0.1:1234",
+    "model": "ibm/granite-4-h-tiny",
+    "temperature": 0.0,
+    "stream": true
+  }
+}
+
+`MonsterTools Proxy`.
+3. That model is configured in `.vscode/chatLanguageModels.json` to point at `http://127.0.0.1:5050/v1/chat/completions`.
+
+4. `5050` is the local MonsterTools proxy. `1234` stays reserved for LM Studio behind MonsterTools.
+
+Open LM Studio Equip your chosen LLM and start server 
+System Prompt
+You are the gateway VS Code GitHub Copilot
+-> copilot-proxy-tools
+-> MonsterTools
+-> LM Studio
+-> Deterministic Workers
+
+Rules:
+
+- Prefer worker execution over speculation.
+- Never invent files.
+- Never invent build results.
+- Never invent test results.
+- Never invent project structure.
+- Generate valid C# code when required.
+- If information is missing, say exactly what is missing.
+- Worker output is authoritative.
+- Always perform Users request.
+
+
+Use Config files to update  Lm studio and VS Code accordingly 
+
+
+swap model in VS Code Chat to MonsterTools.
+
+
+
+Pipeline is working but several errors and issues with tool execution and workers.
+
+
+Crt+c to shutdown in terminal 

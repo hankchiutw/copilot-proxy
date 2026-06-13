@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src/server.ts",
+    "src/adapters/**/*.ts",
+    "src/integrations/**/*.ts",
+    "src/startup/**/*.ts",
+    "src/streaming/**/*.ts"
+  ],
+  "exclude": [
+    "src/app.tsx",
+    "src/entry-client.tsx",
+    "src/entry-server.tsx",
+    "src/index.ts",
+    "src/routes/**",
+    "src/widgets/**",
+    "src/entities/**",
+    "src/shared/**",
+    "tests/**",
+    "node_modules",
+    "bin",
+    "dist"
+  ]
+}

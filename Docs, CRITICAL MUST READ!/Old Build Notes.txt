@@ -1,0 +1,173 @@
+What we are building
+
+Keep them as separate services.
+
+MonsterStack/
+│
+├── CopilotProxy/
+│   ├── src/
+│   ├── middleware/
+│   ├── routes/
+│   ├── adapters/
+│   └── package.json
+│
+├── MonsterTools/
+│   ├── Core/
+│   ├── Services/
+│   ├── Workers/
+│   ├── Program.cs
+│   └── MonsterTools.csproj
+│
+├── Config/
+│   ├── proxy.json
+│   ├── lmstudio.json
+│   └── workers.json
+│
+└── Docs/
+
+The proxy remains Node.
+
+MonsterTools remains C#.
+
+Each can be replaced independently.
+
+Architecture
+The architecture I'd target from the start is:
+VS Code Copilot UI
+         │
+         ▼
+Copilot Proxy
+         │
+         ▼
+MonsterTools Gateway
+         │
+         ├── SearchWorker
+         ├── FileWorker
+         ├── BuildWorker
+         ├── ValidationWorker
+         ├── WorkspaceWorker
+         │
+         ▼
+LM Studio
+         │
+         ▼
+Granite
+
+
+Something important:
+The proxy never talks directly to workers.
+Only MonsterTools does.
+MonsterTools Should Become a Service:
+MonsterTools/
+│
+├── Api/
+│   ├── ExecuteToolEndpoint.cs
+│   ├── ExecuteAgentEndpoint.cs
+│   └── HealthEndpoint.cs
+│
+├── Core/
+│   ├── AgentLoop.cs
+│   ├── ToolExecutor.cs
+│   ├── ToolRouter.cs
+│   └── ToolValidator.cs
+│
+├── Services/
+│   ├── LMStudioService.cs
+│   ├── WorkerDispatcher.cs
+│   └── WorkspaceService.cs
+│
+├── Workers/
+│   ├── SearchWorker.cs
+│   ├── BuildWorker.cs
+│   ├── FileWorker.cs
+│   ├── ValidationWorker.cs
+│   └── WorkspaceWorker.cs
+
+
+The proxy then calls:
+POST http://localhost:8080/api/agent
+instead of directly manipulating workers.
+
+
+Proxy Should Change
+Proxy
+  ├─ normalize request
+  ├─ add workspace metadata
+  ├─ stream responses
+  └─ forward to MonsterTools
+
+MonsterTools becomes the intelligence layer.
+
+Folder Structure For The Proxy
+CopilotProxy/
+│
+├── src/
+│
+├── adapters/
+│   ├── CopilotAdapter.ts
+│   ├── OpenAIAdapter.ts
+│   └── LMStudioAdapter.ts
+│
+├── middleware/
+│   ├── AuthMiddleware.ts
+│   ├── LoggingMiddleware.ts
+│   └── ContextMiddleware.ts
+│
+├── routes/
+│   ├── ChatRoute.ts
+│   ├── CompletionRoute.ts
+│   └── ModelsRoute.ts
+│
+├── integrations/
+│   ├── MonsterToolsClient.ts
+│   └── WorkspaceClient.ts
+│
+├── streaming/
+│   ├── SseHandler.ts
+│   └── ChunkTransformer.ts
+│
+└── config/
+    ├── proxy.json
+    └── models.json
+
+
+
+
+SearchWorker
+    finds facts
+
+BuildWorker
+    finds errors
+
+WorkspaceWorker
+    finds dependencies
+
+FileWorker
+    extracts code
+
+Granite
+    writes code
+
+MonsterTools Intergration
+
+User uses Existing Vs Code GitHub Copilot interface but can now now use it offline and with reliable results.
+Vs Code GitHub Copilot interface - copilot proxy tool - Monster Tools - LM Studio Local Model 
+
+This is done so the user can work offline(from both GitHub copilot and LM Studio) and achieve frontier model results with any local LLms as the model is not relied upon as heavily and deterministic workers perform the tasks.
+IE/EG: user prompts in VS Code GitHub Copilot to Fix, Implement or create a new engine module or pipeline or implement new code the LLM now becomes a orchestrator or coordinator.    
+
+
+-------
+VS Code Copilot UI
+
+-------
+Copilot Compatibility Proxy
+
+-------
+MonsterTools Execution Engine
+
+-------
+Local Model Runtime (LM Studio)
+
+-------
+Deterministic Workers

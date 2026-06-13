@@ -1,0 +1,10 @@
+create me a test file called test.cs with PrintScreen
+
+Optimized tool selection
+
+Created test.cs
+
+A test file named test.cs was created with the content // PrintScreen Console.WriteLine("PrintScreen");. The file is located at test.cs.
+
+// PrintScreen
+Console.WriteLine("PrintScreen");

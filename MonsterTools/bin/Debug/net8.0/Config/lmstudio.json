@@ -1,0 +1,8 @@
+{
+  "lmStudio": {
+    "url": "http://127.0.0.1:1234",
+    "model": "ibm/granite-4-h-tiny",
+    "temperature": 0.0,
+    "stream": true
+  }
+}

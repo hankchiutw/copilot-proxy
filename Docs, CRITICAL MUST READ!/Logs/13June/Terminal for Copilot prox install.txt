@@ -1,0 +1,20 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Ty\Documents\GitHub\MonsterToolsWork_Current_LocalEndpoint_Fix\MonsterToolsWork_fixed\MonsterTools\copilot-proxy-tools> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+PS C:\Users\Ty\Documents\GitHub\MonsterToolsWork_Current_LocalEndpoint_Fix\MonsterToolsWork_fixed\MonsterTools\copilot-proxy-tools> npm install
+
+added 98 packages, and audited 99 packages in 21s
+
+17 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+PS C:\Users\Ty\Documents\GitHub\MonsterToolsWork_Current_LocalEndpoint_Fix\MonsterToolsWork_fixed\MonsterTools\copilot-proxy-tools>

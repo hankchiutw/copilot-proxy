@@ -1,0 +1,126 @@
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER] Success! HTTP server listening on port 1234
+2026-06-10 20:38:51  [INFO]
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER] Supported endpoints:
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]   LM Studio API
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  GET  http://localhost:1234/api/v1/models
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/chat
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/models/load
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/models/download
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  GET http://localhost:1234/api/v1/models/download/status:job_id
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]   OpenAI-compatible
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  GET  http://localhost:1234/v1/models
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/responses
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/chat/completions
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/completions
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/embeddings
+2026-06-10 20:38:51  [INFO]
+2026-06-10 20:38:51  [INFO]
+ [LM STUDIO SERVER] Logs are saved into C:\Users\Ty\.lmstudio\server-logs
+2026-06-10 20:38:51  [INFO]
+ Server started.
+2026-06-10 20:38:51  [INFO]
+ Just-in-time model loading inactive.
+2026-06-10 20:39:28 [DEBUG]
+ Received request: GET to /v1/models
+2026-06-10 20:39:28  [INFO]
+ Returning {
+  "data": [
+    {
+      "id": "ibm/granite-4-h-tiny",
+      "object": "model",
+      "owned_by": "organization_owner"
+    }
+  ],
+  "object": "list"
+}
+2026-06-10 20:47:48  [INFO]
+ Server stopped.
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER] Success! HTTP server listening on port 1234
+2026-06-10 21:34:01  [INFO]
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER] Supported endpoints:
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]   LM Studio API
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  GET  http://localhost:1234/api/v1/models
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/chat
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/models/load
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/api/v1/models/download
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  GET http://localhost:1234/api/v1/models/download/status:job_id
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]   OpenAI-compatible
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  GET  http://localhost:1234/v1/models
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/responses
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/chat/completions
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/completions
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER]    ->  POST http://localhost:1234/v1/embeddings
+2026-06-10 21:34:01  [INFO]
+2026-06-10 21:34:01  [INFO]
+ [LM STUDIO SERVER] Logs are saved into C:\Users\Ty\.lmstudio\server-logs
+2026-06-10 21:34:01  [INFO]
+ Server started.
+2026-06-10 21:34:01  [INFO]
+ Just-in-time model loading inactive.
+2026-06-10 21:35:51 [DEBUG]
+ Received request: GET to /v1/models
+2026-06-10 21:35:51  [INFO]
+ Returning {
+  "data": [
+    {
+      "id": "ibm/granite-4-h-tiny",
+      "object": "model",
+      "owned_by": "organization_owner"
+    }
+  ],
+  "object": "list"
+}
+2026-06-10 21:36:24 [DEBUG]
+ Received request: GET to /v1/models
+2026-06-10 21:36:24  [INFO]
+ Returning {
+  "data": [
+    {
+      "id": "ibm/granite-4-h-tiny",
+      "object": "model",
+      "owned_by": "organization_owner"
+    }
+  ],
+  "object": "list"
+}
+2026-06-10 22:03:59 [DEBUG]
+ Received request: GET to /v1/models
+2026-06-10 22:03:59  [INFO]
+ Returning {
+  "data": [
+    {
+      "id": "ibm/granite-4-h-tiny",
+      "object": "model",
+      "owned_by": "organization_owner"
+    }
+  ],
+  "object": "list"
+}

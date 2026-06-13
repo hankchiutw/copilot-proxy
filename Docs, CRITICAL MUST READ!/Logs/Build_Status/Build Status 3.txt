@@ -1,0 +1,170 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> curl http://localhost:5000/health
+
+Security Warning: Script Execution Risk
+Invoke-WebRequest parses the content of the web page. Script code in the web page might be run when the page is
+parsed.
+      RECOMMENDED ACTION:
+      Use the -UseBasicParsing switch to avoid script code execution.
+
+      Do you want to continue?
+
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): N
+curl : Operation cancelled due to security concerns. Use -UseBasicParsing parameter for safe HTML parsing without
+script execution.
+At line:1 char:1
++ curl http://localhost:5000/health
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : SecurityError: (http://localhost:5000/health:Uri) [Invoke-WebRequest], InvalidOperationE
+   xception
+    + FullyQualifiedErrorId : WebCmdletIEParsingDeclined,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> Invoke-RestMethod http://localhost:5000/health
+
+service      lmStudio timestampUtc
+-------      -------- ------------
+MonsterTools    False 2026-06-10T18:33:42.0875294Z
+
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> Invoke-RestMethod `
+>>   -Uri "http://localhost:5000/api/tool" `
+>>   -Method POST `
+>>   -ContentType "application/json" `
+>>   -Body '{"tool":"search","args":{"pattern":"namespace"}}'
+
+success output
+------- ------
+   True MonsterMcpServer.cs:5: namespace MonsterTools;...
+
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> curl.exe -X POST http://localhost:5000/api/tool ^
+curl: (3) URL rejected: Bad hostname
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools>   -H "Content-Type: application/json" ^
+-H : The term '-H' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the
+spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:3
++   -H "Content-Type: application/json" ^
++   ~~
+    + CategoryInfo          : ObjectNotFound: (-H:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet clean
+
+Build succeeded in 0,3s
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet build
+Restore complete (0,2s)
+  MonsterTools net8.0 succeeded (0,9s) → bin\Debug\net8.0\MonsterTools.dll
+
+Build succeeded in 1,5s
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet run
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5000/health - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: GET /health'
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[100]
+      Start processing HTTP request GET http://127.0.0.1:1234/v1/models
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[100]
+      Sending HTTP request GET http://127.0.0.1:1234/v1/models
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type '<>f__AnonymousType5`3' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: GET /health'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5000/health - 200 - application/json;+charset=utf-8 2314.8973ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5000/health - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: GET /health'
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[100]
+      Start processing HTTP request GET http://127.0.0.1:1234/v1/models
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[100]
+      Sending HTTP request GET http://127.0.0.1:1234/v1/models
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type '<>f__AnonymousType5`3' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: GET /health'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5000/health - 200 - application/json;+charset=utf-8 2027.1206ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost:5000/api/tool - application/json 48
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: POST /api/tool'
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type 'ToolExecuteResponse' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: POST /api/tool'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost:5000/api/tool - 200 - application/json;+charset=utf-8 57.0040ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost:5000/api/tool - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: POST /api/tool'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: POST /api/tool'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost:5000/api/tool - 400 0 - 0.7705ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5000/health - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: GET /health'
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[100]
+      Start processing HTTP request GET http://127.0.0.1:1234/v1/models
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[100]
+      Sending HTTP request GET http://127.0.0.1:1234/v1/models
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type '<>f__AnonymousType5`3' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: GET /health'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5000/health - 200 - application/json;+charset=utf-8 2048.2406ms
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools>   -d "{\"tool\":\"search\",\"args\":{\"pattern\":\"namespace\"}}"Invoke-RestMethod http://localhost:5000/health
+-d : The term '-d' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the
+spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:3
++   -d "{\"tool\":\"search\",\"args\":{\"pattern\":\"namespace\"}}"Invo ...
++   ~~
+    + CategoryInfo          : ObjectNotFound: (-d:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> Invoke-RestMethod http://localhost:5000/health
+
+service      lmStudio timestampUtc
+-------      -------- ------------
+MonsterTools    False 2026-06-10T18:35:13.5774062Z
+
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> Invoke-RestMethod `
+>>   -Uri "http://127.0.0.1:1234/v1/models"
+
+data                                                                    object
+----                                                                    ------
+{@{id=ibm/granite-4-h-tiny; object=model; owned_by=organization_owner}} list
+
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools>

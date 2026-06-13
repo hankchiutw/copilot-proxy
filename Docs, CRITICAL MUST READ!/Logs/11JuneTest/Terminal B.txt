@@ -1,0 +1,74 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet run
+info: Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider[1]
+      No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+[Host Engine] Registering MonsterTools Core Engine Layer...
+[Host Engine] Auto-starting Copilot Proxy Gateway via powershell constraint context...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools
+[Proxy Node Log] > copilot-proxy-tools@1.0.0 dev
+[Proxy Node Log] > tsx watch src/server.ts
+[Proxy Node Log] copilot-proxy-tools listening on http://127.0.0.1:5050
+[Proxy Node Log] MonsterTools -> http://127.0.0.1:5000
+[Proxy Node Log] LM Studio -> http://127.0.0.1:1234
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5000/health - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: GET /health'
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[100]
+      Start processing HTTP request GET http://127.0.0.1:1234/v1/models
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[100]
+      Sending HTTP request GET http://127.0.0.1:1234/v1/models
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[101]
+      Received HTTP response headers after 63.3863ms - 200
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[101]
+      End processing HTTP request after 69.5277ms - 200
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type '<>f__AnonymousType5`3' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: GET /health'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5000/health - 200 - application/json;+charset=utf-8 425.7437ms
+[Proxy Node Error] SyntaxError: Unexpected non-whitespace character after JSON at position 220 (line 9 column 2)
+[Proxy Node Error]     at JSON.parse (<anonymous>)
+[Proxy Node Error]     at parse (C:\Users\Ty\Documents\GitHub\MonsterTools\copilot-proxy-tools\node_modules\body-parser\lib\types\json.js:92:19)
+[Proxy Node Error]     at C:\Users\Ty\Documents\GitHub\MonsterTools\copilot-proxy-tools\node_modules\body-parser\lib\read.js:128:18
+[Proxy Node Error]     at AsyncResource.runInAsyncScope (node:async_hooks:228:14)
+[Proxy Node Error]     at invokeCallback (C:\Users\Ty\Documents\GitHub\MonsterTools\copilot-proxy-tools\node_modules\raw-body\index.js:238:16)
+[Proxy Node Error]     at done (C:\Users\Ty\Documents\GitHub\MonsterTools\copilot-proxy-tools\node_modules\raw-body\index.js:227:7)
+[Proxy Node Error]     at IncomingMessage.onEnd (C:\Users\Ty\Documents\GitHub\MonsterTools\copilot-proxy-tools\node_modules\raw-body\index.js:287:7)
+[Proxy Node Error]     at IncomingMessage.emit (node:events:508:28)
+[Proxy Node Error]     at endReadableNT (node:internal/streams/readable:1729:12)
+[Proxy Node Error]     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://127.0.0.1:5000/api/agent - application/json 128
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: POST /api/agent'
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:1234/v1/chat/completions
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:1234/v1/chat/completions
+info: System.Net.Http.HttpClient.lmstudio.ClientHandler[101]
+      Received HTTP response headers after 8763.2716ms - 200
+info: System.Net.Http.HttpClient.lmstudio.LogicalHandler[101]
+      End processing HTTP request after 8763.3752ms - 200
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type 'AgentResponse' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: POST /api/agent'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://127.0.0.1:5000/api/agent - 200 - application/json;+charset=utf-8 9026.3534ms

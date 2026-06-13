@@ -1,0 +1,411 @@
+Ok I am uploading and attaching the latest Zip of MonsterTools with the copilot-proxy-tools.
+
+Critical do a Line by Line Code audit and review of the project in the Zip attached.
+
+
+
+Windows PowerShell
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet clean
+
+
+
+Build succeeded in 3,6s
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet build
+
+Restore complete (6,3s)
+
+  MonsterTools net8.0 failed with 21 error(s) (7,1s)
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(90,1): error CS8803: Top-level statements must precede namespace and type declarations.
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(91,1): error CS0106: The modifier 'public' is not valid for this item
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,6): error CS1026: ) expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,6): error CS1002: ; expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,13): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,115): error CS1044: Cannot use more than one type in a for, using, fixed, or declaration statement
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,123): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,185): error CS1002: ; expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,185): error CS1022: Type or namespace definition, or end-of-file expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,198): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,263): error CS1002: ; expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,263): error CS1022: Type or namespace definition, or end-of-file expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(115,279): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,71): error CS1002: ; expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,91): error CS1002: ; expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,108): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,144): error CS1044: Cannot use more than one type in a for, using, fixed, or declaration statement
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,149): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,196): error CS1044: Cannot use more than one type in a for, using, fixed, or declaration statement
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,200): error CS1003: Syntax error, ',' expected
+
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\MonsterTools.Tests\ToolExecutionEngineTest.cs(116,249): error CS1002: ; expected
+
+
+
+Build failed with 21 error(s) in 14,0s
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools>
+
+
+
+ToolExecutionEngineTest.cs
+
+using Xunit;
+
+using MonsterTools.Services;
+
+using System.Text.Json;
+
+
+
+namespace MonsterTools.Tests
+
+{
+
+    public class ToolExecutionEngineTests
+
+    {
+
+        private readonly ToolExecutionEngine _engine;
+
+        private readonly LMStudioService _mockLmStudio;
+
+
+
+        public ToolExecutionEngineTests()
+
+        {
+
+            // Initialize dependencies. Since LMStudioService uses HttpClient internally,
+
+            // we configure it to hit a non-existent local address to prevent real network calls.
+
+            _mockLmStudio = new LMStudioService("http://127.0.0.1:9999", "test-model");
+
+            _engine = new ToolExecutionEngine(_mockLmStudio);
+
+        }
+
+
+
+        [Fact]
+
+        public async Task ExecuteAsync_WithMalformedJson_ReturnsErrorPayload()
+
+        {
+
+            // Arrange
+
+            string malformedJson = "{ \"toolName\": \"InvalidJson... ";
+
+
+
+            // Act
+
+            var resultString = await _engine.ExecuteAsync(malformedJson);
+
+            using var doc = JsonDocument.Parse(resultString);
+
+            var root = doc.RootElement;
+
+
+
+            // Assert
+
+            Assert.True(root.TryGetProperty("error", out var errorProp));
+
+            Assert.Contains("JsonException", errorProp.GetString());
+
+        }
+
+
+
+        [Fact]
+
+        public async Task ExecuteAsync_WithUnknownToolName_ReturnsUnsupportedToolMessage()
+
+        {
+
+            // Arrange
+
+            var payload = new
+
+            {
+
+                toolName = "non_existent_tool_xyz",
+
+                arguments = new { parameter = "value" }
+
+            };
+
+            string jsonPayload = JsonSerializer.Serialize(payload);
+
+
+
+            // Act
+
+            var resultString = await _engine.ExecuteAsync(jsonPayload);
+
+            using var doc = JsonDocument.Parse(resultString);
+
+            var root = doc.RootElement;
+
+
+
+            // Assert
+
+            Assert.True(root.TryGetProperty("success", out var successProp));
+
+            Assert.False(successProp.GetBoolean());
+
+            
+
+            Assert.True(root.TryGetProperty("output", out var outputProp));
+
+            Assert.Contains("unsupported", outputProp.GetString()?.ToLowerInvariant());
+
+        }
+
+
+
+        [Theory]
+
+        [InlineData("echo_tool", "hello test execution")]
+
+        [InlineData("ping_tool", "network validation sequence")]
+
+        public async Task ExecuteAsync_WithValidCoreTools_RoutesAndProcessesSuccessfully(string toolName, string inputData)
+
+        {
+
+            // Arrange
+
+            var payload = new
+
+            {
+
+                toolName = toolName,
+
+                arguments = new { message = inputData }
+
+            };
+
+            string jsonPayload = JsonSerializer.Serialize(payload);
+
+
+
+            // Act
+
+            var resultString = await _engine.ExecuteAsync(jsonPayload);
+
+            using var doc = JsonDocument.Parse(resultString);
+
+            var root = doc.RootElement;
+
+
+
+            // Assert
+
+            // Checks that structural execution routes complete without uncaught execution crashes
+
+            Assert.True(root.TryGetProperty("success", out var successProp), "Payload must contain success key.");
+
+            Assert.True(root.TryGetProperty("output", out var outputProp), "Payload must contain output content value.");
+
+            
+
+            // Validate that structural execution traces record the invoked system tool name accurately
+
+            string outputContent = outputProp.GetString() ?? "";
+
+            Assert.NotNull(outputContent);
+
+        }
+
+    }
+
+}
+
+
+
+[Fact]
+
+public async Task LMStudioService_WithMockedClient_ParsesSimulatedResponseText()
+
+{
+
+    // Arrange: Create a mock client that returns a specific structured phrase
+
+    string expectedOutput = "Mocked response from Granite model engine!";
+
+    HttpClient mockClient = HttpClientMockFactory.CreateJsonClient(expectedOutput);
+
+
+
+    // Instantiate your real service pointing to your mocked client backend pipeline
+
+    var testingService = new LMStudioService("http://localhost:1234", "granite");
+
+    
+
+    // Inject the mock client into your service pipeline (assumes an accessible property or constructor injection)
+
+    // e.g., testingService.SetClient(mockClient); or passing it down directly.
+
+
+
+    // Act
+
+    // Run your service operations here to verify it handles the custom mocked response text cleanly.
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(How to Run and Verify the SuiteTo register and trigger your newly implemented automated testing suite framework, execute the standard .NET testing utility command inside your terminal:Navigate to the solution folder containing both projects.Run the test command:bashdotnet test
+
+Use code with caution.The test runner will automatically discover the [Fact] and [Theory] execution blocks inside ToolExecutionEngineTests.cs, pass structural variations down into your codebase, and output pure success tallies across your console.)
+
+
+
+
+
+Critical i need to know what to do next and how to correctly implement and incorporate it.
+
+Critical Generate me the full correct Code write for each that needs a full rewrite now. Its My Bday this Weekend and i want this working to be my present to myself.
+
+So Give me the next full write up in the correct code C# ,typescript, Json for the relevant parts that need correcting. 
+
+
+
+This is what we are building (eep Code Base Structural AuditThe repository combines a high-performance C# backend core with a lightweight Node.js/TypeScript gateway. Together, they abstract low-compute model deficiencies by wrapping them in hard-coded runtime verification loops.The architecture, detailed in full in, utilizes a TypeScript gateway (copilot-proxy-tools/) to mimic OpenAI API calls and forward them to a C# .NET Core engine (MonsterTools/). This engine uses AgentLoop.cs to orchestrate ToolExecutor workers (BuildWorker.cs, Searchworkers.cs) to execute deterministic filesystem and build tasks based on local LLM outputs. Comprehensive Architecture Analysis, This repository is designed to act as a Model Context Protocol (MCP) bridging layer tailored for local software development workflows.The primary utility of MonsterTools is to empower low-compute, small footprint local models (such as ibm/granite-4-h-tiny) by offloading complex or multi-step tasks into local, deterministic tools. It coordinates communications between the VS Code Copilot UI, a TypeScript-based Compatibility Proxy, an Agent Loop Orchestration Core, and local tool executors.How the Multi-Layer Pipeline WorksThe execution lifecycle flow operates linearly across five distinct architectural layers:
+
+[Layer 1: VS Code Copilot UI] 
+
+         ↓ (Standard OpenAI /v1/chat/completions schema payload)
+
+[Layer 2: Copilot Compatibility Proxy (Node.js/TypeScript)]
+
+         ↓ (Transforms formatting & calls local engine /api/agent)
+
+[Layer 3: MonsterTools Execution Engine (C# .NET Core)]
+
+         ↓ (Evaluates tasks using AgentLoop, ToolRouter, & WorkerDispatcher)
+
+[Layer 4: Local Model Runtime (LM Studio)]
+
+         ↓ (Interrogated by the C# engine using custom parameters)
+
+[Layer 5: Deterministic Workers]
+
+           (Executes precise local tasks: builds, file scans, searches)
+
+
+
+The Request Interceptor (Layer 1 → Layer 2): The VS Code Copilot UI makes a chat completion request. Instead of routing to the cloud, it hits your local copilot-proxy-tools application.The Schema Normalizer (Layer 2 → Layer 3): The proxy translates open-ended chat queries into structured payloads, streaming back incremental Server-Sent Events (SSE) to the UI while talking to the C# Core Engine.The Brain Loop (Layer 3 → Layer 4): The engine's AgentLoop.cs interrogates LM Studio (LMStudioService.cs) to dynamically break down code intents into structural system calls.The Safe Execution Vector (Layer 3 → Layer 5): ToolRouter.cs maps the requested action, and WorkerDispatcher.cs sends it to targeted background scripts (e.g., BuildWorker.cs, Searchworkers.cs).The Deterministic Return: Instead of allowing the LLM to hallucinate file outputs, code is validated natively, and the raw system-checked tool execution payload travels back up the chain to the user's IDE.
+
+
+
+
+
+review these Critical Issues that were Preventing It From Working, The application cannot successfully run or integrate end-to-end in its current state due to the following core blocking issues:1. Decoupled Service Injection in LMStudioService.csThe Bug: LMStudioService.cs relies on a hardcoded initialization layout. However, inside your main orchestration loop, there is a naming discrepancy between your proxy configurations and how the C# HTTP request lifecycle handles state tracking. Because the HttpClient setup inside the service lacks clear property visibility parameters or custom mock intercept handlers, you cannot perform decoupled mock unit tests across different network layers.The Fix: Add an explicit, constructor-injectable custom HttpClient override inside LMStudioService.cs so your engine can switch safely between real upstream connections and downstream mock factory loops.2. Lack of Inbound Payload Route Mapping in Program.csThe Bug: While the directory structure outlines files like AgentLoop.cs and ToolRouter.cs, the core initialization file (Program.cs) does not register a web host pipeline or mapping handlers for the /api/agent POST endpoint. Because this entry gateway is unmapped, the Node.js TypeScript proxy fails with connection refused crashes when attempting to delegate tasks down to Layer 3.The Fix: Update your C# Program.cs file using standard ASP.NET Minimal APIs to explicitly handle and route requests targeting the /api/agent route.3. Corrupt Namespace Truncation across Core ComponentsThe Bug: Your classes are organized cleanly into subfolders (/Core, /Services, /Workers), but several internal documents possess mismatching namespace headers. Mixing up scopes across folders like MonsterTools.Core and MonsterTools.Services breaks compiler dependency matching during compilation steps.The Fix: Standardize your file names to match their corresponding C# classes exactly and synchronize internal class tracking configurations to clear workspace ambiguity.4. Malformed Stream Termination in ChunkTransformer.tsThe Bug: When ChunkTransformer.ts parses rapid multi-token output strings from your local model runtime, it assumes line fragments always split cleanly along \n boundaries. If an active connection packet divides exactly halfway across an internal data block payload string, the JSON parser triggers catastrophic crash loops because it attempts to process partial syntax snippets.The Fix: Maintain a sticky, safe downstream text string buffer array cache that validates complete brace configurations ({...}) prior to triggering JSON parse commands.5. Broken Local Loop Network Loopback Address ConfigurationThe Bug: Across the workspace configurations (proxy.json), references alternate between http://localhost and explicit IP notation loops like http://127.0.0.1. In many modern operating systems, Node.js translates localhost exclusively over IPv6 protocols (::1), while local system software tools default strictly over IPv4 networks, resulting in broken handshakes.The Fix: Standardize all configuration mapping profiles to bind cleanly to uniform IP loops across both the proxy configurations and your core C# services layer.
+
+) Basically the User will use VS Code with GitHub Copilot Interface and connect that to LM Studio running a Local Model. This must successfully fit into that pipeline. 
+
+when i temporarily removed the MonsterTools.Test Folder and tried to build 
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet clean
+
+Build succeeded in 0,3s
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools> dotnet build
+Restore complete (0,2s)
+  MonsterTools net8.0 failed with 34 error(s) (2,2s)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Host\MonsterToolsHost.cs(3,28): error CS0234: The type or namespace name 'Analysis' does not exist in the namespace 'MonsterTools.Workers' (are you missing an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Host\MonsterToolsHost.cs(4,28): error CS0234: The type or namespace name 'Build' does not exist in the namespace 'MonsterTools.Workers' (are you missing an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Host\MonsterToolsHost.cs(5,28): error CS0234: The type or namespace name 'Git' does not exist in the namespace 'MonsterTools.Workers' (are you missing an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Program.cs(16,33): error CS0234: The type or namespace name 'Resilience' does not exist in the namespace 'Microsoft.Extensions.Http' (are you missing an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Program.cs(17,7): error CS0246: The type or namespace name 'Polly' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(1,7): error CS0246: The type or namespace name 'Xunit' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\WorkspaceService.cs(21,21): error CS0101: The namespace 'MonsterTools.Services' already contains a definition for 'WorkspaceService'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(13,43): error CS0246: The type or namespace name 'HttpHandler' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Core\ToolArgumentNormalizer.cs(5,43): error CS0246: The type or namespace name 'IToolArgumentNormalizer' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(62,26): error CS0246: The type or namespace name 'ToolExecutionEngine' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(71,10): error CS0246: The type or namespace name 'FactAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(71,10): error CS0246: The type or namespace name 'Fact' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(84,10): error CS0246: The type or namespace name 'FactAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(84,10): error CS0246: The type or namespace name 'Fact' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(104,10): error CS0246: The type or namespace name 'TheoryAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(104,10): error CS0246: The type or namespace name 'Theory' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(105,10): error CS0246: The type or namespace name 'InlineDataAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(105,10): error CS0246: The type or namespace name 'InlineData' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(106,10): error CS0246: The type or namespace name 'InlineDataAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(106,10): error CS0246: The type or namespace name 'InlineData' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(125,10): error CS0246: The type or namespace name 'FactAttribute' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Services\ToolExecutionEngine.cs(125,10): error CS0246: The type or namespace name 'Fact' could not be found (are you missing a using directive or an assembly reference?)
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Core\ToolWorkerBase.cs(3,40): error CS0535: 'ToolWorkerBase' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Core\ToolWorkerBase.cs(3,40): error CS0535: 'ToolWorkerBase' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\WorkspaceScanWorker.cs(6,43): error CS0535: 'WorkspaceScanWorker' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\WorkspaceScanWorker.cs(6,43): error CS0535: 'WorkspaceScanWorker' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\PatchFileWorker.cs(6,39): error CS0535: 'PatchFileWorker' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\PatchFileWorker.cs(6,39): error CS0535: 'PatchFileWorker' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Analysis\ValidationWorker.cs(5,33): error CS0535: 'ValidationWorker' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Analysis\ValidationWorker.cs(5,33): error CS0535: 'ValidationWorker' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\ReadFileWorker.cs(6,38): error CS0535: 'ReadFileWorker' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\ReadFileWorker.cs(6,38): error CS0535: 'ReadFileWorker' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\WriteFileWorker.cs(6,39): error CS0535: 'WriteFileWorker' does not implement interface member 'IToolWorker.Description'
+    C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools\Workers\Workspace\WriteFileWorker.cs(6,39): error CS0535: 'WriteFileWorker' does not implement interface member 'IToolWorker.ExecuteAsync(ToolRequest)'
+
+Build failed with 34 error(s) in 2,8s
+PS C:\Users\Ty\Documents\GitHub\MonsterTools\MonsterTools>
+
+These Issues are critical and need to be fixed and corrected now as i said its my Bday this weekend Lets get this Working yesterday.
+
+Critical Generate the full Code write up Do not tell me to just iimpliment regenerate a complete production grade version.

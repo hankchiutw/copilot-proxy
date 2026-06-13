@@ -1,0 +1,50 @@
+\MonsterTools 
+  Program.cs
+  MonsterTools.csproj
+  MonsterMcpServer.cs
+\Core
+  AgentLoop.cs
+  IToolWorker.cs
+  ToolCall.cs
+  ToolExecutor.cs
+  ToolRequest.cs
+  ToolResult.cs
+  ToolRouter.cs
+  ToolSchemas.cs
+  ToolWorkerBase.cs
+  ToolArgumentNormalizer.cs
+  ToolValidator.cs
+\Services
+ LlmClient.cs
+ LMStudioService.cs
+ WorkerDispatcher.cs
+\Workers
+ BuildWorker.cs
+ FileSystemWorkers.cs
+ FileWorkers.cs
+ Searchworkers.cs
+ ValidationWorkers.c
+ WorkspaceWorker.cs
+\obj
+  \Debug
+  MonsterTools.csproj.nuget.dgspec.json
+  MonsterTools.csproj.nuget.g.props
+  MonsterTools.csproj.nuget.g.targets
+  project.assets.json
+  project.nuget.cache
+
+
+
+Program.cs
+   ↓
+McpServer.Run()
+   ↓
+Deserialize MCP request
+   ↓
+WorkerDispatcher
+   ↓
+ToolExecutor
+   ↓
+SearchWorker
+   ↓
+JSON response back
